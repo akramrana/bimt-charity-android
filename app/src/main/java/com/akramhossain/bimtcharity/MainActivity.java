@@ -92,10 +92,6 @@ public class MainActivity extends AppCompatActivity
             binding.toolbar.setTitle("Documents");
         } else if (itemId == R.id.nav_activity_log) {
             binding.toolbar.setTitle("Activity Log");
-        } else if (itemId == R.id.nav_report) {
-            binding.toolbar.setTitle("Report");
-        } else if (itemId == R.id.nav_send_mail) {
-            binding.toolbar.setTitle("Send Mail");
         }
 
         //Toast.makeText(this, item.getTitle(), Toast.LENGTH_SHORT).show();

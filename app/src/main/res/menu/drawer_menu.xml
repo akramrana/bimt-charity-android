@@ -50,16 +50,6 @@
             android:icon="@android:drawable/ic_menu_recent_history"
             android:title="Activity Log" />
 
-        <item
-            android:id="@+id/nav_report"
-            android:icon="@android:drawable/ic_menu_sort_by_size"
-            android:title="Report" />
-
-        <item
-            android:id="@+id/nav_send_mail"
-            android:icon="@android:drawable/ic_dialog_email"
-            android:title="Send Mail" />
-
     </group>
 
 </menu>
