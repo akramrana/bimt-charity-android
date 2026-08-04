@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="bimt_green">#086638</color>
+    <color name="bimt_green_dark">#064B2A</color>
+    <color name="bimt_green_light">#E5F3EB</color>
+
+    <color name="bimt_gold">#C89B2C</color>
+    <color name="bimt_navy">#123B68</color>
+
+    <color name="background_light">#FAF9FC</color>
+
 </resources>
