@@ -1,5 +1,6 @@
 package com.akramhossain.bimtcharity.fragments;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,13 +17,20 @@ import com.akramhossain.bimtcharity.R;
 import com.akramhossain.bimtcharity.adapters.DashboardCardAdapter;
 import com.akramhossain.bimtcharity.databinding.FragmentDashboardBinding;
 import com.akramhossain.bimtcharity.models.DashboardCard;
+import com.akramhossain.bimtcharity.models.DashboardResponse;
+import com.akramhossain.bimtcharity.network.ApiClient;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class DashboardFragment extends Fragment {
 
     private FragmentDashboardBinding binding;
+    private DashboardCardAdapter adapter;
 
     @Nullable
     @Override
@@ -32,53 +40,157 @@ public class DashboardFragment extends Fragment {
 
         binding = FragmentDashboardBinding.inflate(inflater, container, false);
 
-        setupDashboardCards();
+        setupRecyclerView();
+        loadDashboard();
 
         return binding.getRoot();
     }
 
-    private void setupDashboardCards() {
+    private void setupRecyclerView() {
+        adapter = new DashboardCardAdapter(
+                new ArrayList<>(),
+                card -> Toast.makeText(
+                        requireContext(),
+                        card.getTitle(),
+                        Toast.LENGTH_SHORT
+                ).show()
+        );
+
+        binding.dashboardRecyclerView.setLayoutManager(
+                new LinearLayoutManager(requireContext())
+        );
+
+        binding.dashboardRecyclerView.setAdapter(adapter);
+    }
+
+    private void loadDashboard() {
+        String userId = requireContext()
+                .getSharedPreferences(
+                        "bimt_session",
+                        Context.MODE_PRIVATE
+                )
+                .getString("member_id", "");
+
+        if (userId == null || userId.trim().isEmpty()) {
+            Toast.makeText(
+                    requireContext(),
+                    "Member information not found",
+                    Toast.LENGTH_LONG
+            ).show();
+
+            return;
+        }
+
+        ApiClient.getApiService()
+                .getDashboard(userId)
+                .enqueue(new Callback<DashboardResponse>() {
+                    @Override
+                    public void onResponse(
+                            @NonNull Call<DashboardResponse> call,
+                            @NonNull Response<DashboardResponse> response
+                    ) {
+                        if (!isAdded() || binding == null) {
+                            return;
+                        }
+
+                        if (!response.isSuccessful()) {
+                            Toast.makeText(
+                                    requireContext(),
+                                    "Dashboard request failed: HTTP "
+                                            + response.code(),
+                                    Toast.LENGTH_LONG
+                            ).show();
+
+                            return;
+                        }
+
+                        DashboardResponse result = response.body();
+
+                        if (result == null
+                                || !result.isSuccess()
+                                || result.getData() == null) {
+
+                            String message = result == null
+                                    ? "Invalid dashboard response"
+                                    : result.getMessage();
+
+                            if (message == null || message.trim().isEmpty()) {
+                                message = "Unable to load dashboard";
+                            }
+
+                            Toast.makeText(
+                                    requireContext(),
+                                    message,
+                                    Toast.LENGTH_LONG
+                            ).show();
+
+                            return;
+                        }
+
+                        setupDashboardCards(result.getData());
+                    }
+
+                    @Override
+                    public void onFailure(
+                            @NonNull Call<DashboardResponse> call,
+                            @NonNull Throwable throwable
+                    ) {
+                        if (!isAdded() || binding == null) {
+                            return;
+                        }
+
+                        Toast.makeText(
+                                requireContext(),
+                                "Connection failed: "
+                                        + throwable.getMessage(),
+                                Toast.LENGTH_LONG
+                        ).show();
+                    }
+                });
+    }
+
+    private void setupDashboardCards(DashboardResponse.DashboardData data) {
         List<DashboardCard> cards = new ArrayList<>();
 
         cards.add(new DashboardCard(
                 R.drawable.ic_members,
                 "NUMBER OF MEMBERS",
-                "167",
+                safeValue(data.getUsers()),
                 Color.parseColor("#F39C12")
         ));
 
         cards.add(new DashboardCard(
                 R.drawable.ic_invoice,
                 "INVOICE SENT THIS MONTH",
-                "0",
+                safeValue(data.getMonthlyInvoice()),
                 Color.parseColor("#00A65A")
         ));
 
         cards.add(new DashboardCard(
                 R.drawable.ic_payment_received,
                 "PAYMENT RECEIVED THIS MONTH",
-                "0",
+                safeValue(data.getPaymentReceived()),
                 Color.parseColor("#00C0EF")
         ));
 
         cards.add(new DashboardCard(
                 R.drawable.ic_fund_request,
                 "FUND REQUEST THIS MONTH",
-                "0",
+                safeValue(data.getFundRequest()),
                 Color.parseColor("#DD4B39")
         ));
 
         cards.add(new DashboardCard(
                 R.drawable.ic_payment_release,
                 "PAYMENT RELEASE THIS MONTH",
-                "0",
+                safeValue(data.getPaymentRelease()),
                 Color.parseColor("#00A65A")
         ));
 
         cards.add(new DashboardCard(
                 R.drawable.ic_expense,
                 "EXPENSE THIS MONTH",
-                "0",
+                safeValue(data.getExpenses()),
                 Color.parseColor("#00C0EF")
         ));
 
@@ -109,5 +221,13 @@ public class DashboardFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    private String safeValue(String value) {
+        if (value == null || value.trim().isEmpty()) {
+            return "0";
+        }
+
+        return value;
     }
 }

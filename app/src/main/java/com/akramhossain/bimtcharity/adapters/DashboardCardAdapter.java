@@ -82,4 +82,10 @@ public class DashboardCardAdapter
             );
         }
     }
+
+    public void updateCards(List<DashboardCard> newCards) {
+        cards.clear();
+        cards.addAll(newCards);
+        notifyDataSetChanged();
+    }
 }
