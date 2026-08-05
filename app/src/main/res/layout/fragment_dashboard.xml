@@ -18,6 +18,23 @@
             android:layout_marginTop="16dp"
             android:nestedScrollingEnabled="false" />
 
+        <TextView
+            android:id="@+id/txtFundRequestStatusTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Fund Request Status"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/fundStatusRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:nestedScrollingEnabled="false" />
+
     </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>

@@ -11,13 +11,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.akramhossain.bimtcharity.R;
 import com.akramhossain.bimtcharity.adapters.DashboardCardAdapter;
+import com.akramhossain.bimtcharity.adapters.FundStatusAdapter;
 import com.akramhossain.bimtcharity.databinding.FragmentDashboardBinding;
 import com.akramhossain.bimtcharity.models.DashboardCard;
 import com.akramhossain.bimtcharity.models.DashboardResponse;
+import com.akramhossain.bimtcharity.models.FundStatus;
 import com.akramhossain.bimtcharity.network.ApiClient;
 
 import java.util.ArrayList;
@@ -30,7 +33,8 @@ import retrofit2.Response;
 public class DashboardFragment extends Fragment {
 
     private FragmentDashboardBinding binding;
-    private DashboardCardAdapter adapter;
+    private DashboardCardAdapter dashboardAdapter;
+    private FundStatusAdapter fundStatusAdapter;
 
     @Nullable
     @Override
@@ -47,7 +51,7 @@ public class DashboardFragment extends Fragment {
     }
 
     private void setupRecyclerView() {
-        adapter = new DashboardCardAdapter(
+        dashboardAdapter = new DashboardCardAdapter(
                 new ArrayList<>(),
                 card -> Toast.makeText(
                         requireContext(),
@@ -60,7 +64,15 @@ public class DashboardFragment extends Fragment {
                 new LinearLayoutManager(requireContext())
         );
 
-        binding.dashboardRecyclerView.setAdapter(adapter);
+        binding.dashboardRecyclerView.setAdapter(dashboardAdapter);
+
+        fundStatusAdapter = new FundStatusAdapter();
+
+        binding.fundStatusRecyclerView.setLayoutManager(
+                new GridLayoutManager(requireContext(), 2)
+        );
+
+        binding.fundStatusRecyclerView.setAdapter(fundStatusAdapter);
     }
 
     private void loadDashboard() {
@@ -194,21 +206,8 @@ public class DashboardFragment extends Fragment {
                 Color.parseColor("#00C0EF")
         ));
 
-        DashboardCardAdapter adapter = new DashboardCardAdapter(
-                cards,
-                card -> Toast.makeText(
-                        requireContext(),
-                        card.getTitle(),
-                        Toast.LENGTH_SHORT
-                ).show()
-        );
-
-        binding.dashboardRecyclerView.setLayoutManager(
-                new LinearLayoutManager(requireContext())
-        );
-
-        binding.dashboardRecyclerView.setHasFixedSize(false);
-        binding.dashboardRecyclerView.setAdapter(adapter);
+        dashboardAdapter.updateCards(cards);
+        showFundStatuses(data.getStats());
     }
 
     @Override
@@ -229,5 +228,36 @@ public class DashboardFragment extends Fragment {
         }
 
         return value;
+    }
+
+    private void showFundStatuses(
+            List<DashboardResponse.FundStat> stats
+    ) {
+        List<FundStatus> items = new ArrayList<>();
+
+        if (stats == null) {
+            fundStatusAdapter.updateItems(items);
+            return;
+        }
+
+        for (DashboardResponse.FundStat stat : stats) {
+            String currency = "BDT";
+
+            if (stat.getCurrencyStats() != null
+                    && !stat.getCurrencyStats().isEmpty()
+                    && stat.getCurrencyStats().get(0).getCode() != null) {
+
+                currency = stat.getCurrencyStats().get(0).getCode();
+            }
+
+            items.add(new FundStatus(
+                    safeValue(stat.getName()),
+                    safeValue(stat.getFundRequestCount()),
+                    safeValue(stat.getAmount()),
+                    currency
+            ));
+        }
+
+        fundStatusAdapter.updateItems(items);
     }
 }
