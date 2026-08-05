@@ -50,6 +50,11 @@
             android:icon="@android:drawable/ic_menu_recent_history"
             android:title="Activity Log" />
 
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_logout"
+            android:title="Logout" />
+
     </group>
 
 </menu>

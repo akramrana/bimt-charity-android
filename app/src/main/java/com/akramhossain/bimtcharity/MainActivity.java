@@ -1,7 +1,9 @@
 package com.akramhossain.bimtcharity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
@@ -12,7 +14,9 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.akramhossain.bimtcharity.databinding.ActivityMainBinding;
+import com.akramhossain.bimtcharity.databinding.NavHeaderMainBinding;
 import com.akramhossain.bimtcharity.fragments.DashboardFragment;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity
@@ -43,6 +47,28 @@ public class MainActivity extends AppCompatActivity
 
         binding.navigationView.setNavigationItemSelectedListener(this);
         binding.navigationView.setCheckedItem(R.id.nav_dashboard);
+
+        View headerView = binding.navigationView.getHeaderView(0);
+
+        NavHeaderMainBinding headerBinding = NavHeaderMainBinding.bind(headerView);
+
+        String fullname = getSharedPreferences(
+                "bimt_session",
+                MODE_PRIVATE
+        ).getString("fullname", "Member");
+
+        headerBinding.txtUserName.setText(fullname);
+
+        String memberCode = getSharedPreferences(
+                "bimt_session",
+                MODE_PRIVATE
+        ).getString("member_code", "");
+
+        headerBinding.txtStatus.setText(
+                memberCode.isEmpty()
+                        ? "● Online"
+                        : "● Online  •  " + memberCode
+        );
 
         getOnBackPressedDispatcher().addCallback(
                 this,
@@ -92,12 +118,40 @@ public class MainActivity extends AppCompatActivity
             binding.toolbar.setTitle("Documents");
         } else if (itemId == R.id.nav_activity_log) {
             binding.toolbar.setTitle("Activity Log");
+        }else if (itemId == R.id.nav_logout) {
+            logout();
         }
 
         //Toast.makeText(this, item.getTitle(), Toast.LENGTH_SHORT).show();
         binding.drawerLayout.closeDrawer(GravityCompat.START);
 
         return true;
+    }
+
+    private void logout() {
+
+        new MaterialAlertDialogBuilder(this)
+                .setTitle("Logout")
+                .setMessage("Are you sure you want to logout?")
+                .setNegativeButton("Cancel", null)
+                .setPositiveButton("Logout", (dialog, which) -> {
+
+                    getSharedPreferences("bimt_session", MODE_PRIVATE)
+                            .edit()
+                            .clear()
+                            .apply();
+
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    intent.addFlags(
+                            Intent.FLAG_ACTIVITY_NEW_TASK
+                                    | Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    );
+
+                    startActivity(intent);
+                    finish();
+
+                })
+                .show();
     }
 
 }
