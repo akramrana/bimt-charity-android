@@ -6,6 +6,7 @@ import com.akramhossain.bimtcharity.models.InvoiceResponse;
 import com.akramhossain.bimtcharity.models.LoginRequest;
 import com.akramhossain.bimtcharity.models.LoginResponse;
 import com.akramhossain.bimtcharity.models.PaymentReceivedResponse;
+import com.akramhossain.bimtcharity.models.PaymentReleaseResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -37,6 +38,12 @@ public interface ApiService {
 
     @GET("ws/fund-request")
     Call<FundRequestResponse> getFundRequests(
+            @Query("user_id") String userId,
+            @Query("page") int page
+    );
+
+    @GET("ws/payment-release")
+    Call<PaymentReleaseResponse> getPaymentReleases(
             @Query("user_id") String userId,
             @Query("page") int page
     );

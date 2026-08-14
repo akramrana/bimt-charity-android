@@ -30,10 +30,10 @@
             android:icon="@android:drawable/ic_menu_send"
             android:title="Donation" />
 
-        <item
-            android:id="@+id/nav_expenses"
-            android:icon="@android:drawable/ic_menu_edit"
-            android:title="Expenses" />
+<!--        <item-->
+<!--            android:id="@+id/nav_expenses"-->
+<!--            android:icon="@android:drawable/ic_menu_edit"-->
+<!--            android:title="Expenses" />-->
 
         <item
             android:id="@+id/nav_members"

@@ -19,6 +19,7 @@ import com.akramhossain.bimtcharity.fragments.DashboardFragment;
 import com.akramhossain.bimtcharity.fragments.FundRequestFragment;
 import com.akramhossain.bimtcharity.fragments.InvoiceFragment;
 import com.akramhossain.bimtcharity.fragments.PaymentReceivedFragment;
+import com.akramhossain.bimtcharity.fragments.PaymentReleaseFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
 
@@ -140,10 +141,19 @@ public class MainActivity extends AppCompatActivity
                     .commit();
             binding.toolbar.setTitle("Fund Request");
         } else if (itemId == R.id.nav_donation) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(
+                            R.id.contentFrame,
+                            new PaymentReleaseFragment()
+                    )
+                    .commit();
             binding.toolbar.setTitle("Donation");
-        } else if (itemId == R.id.nav_expenses) {
-            binding.toolbar.setTitle("Expenses");
-        } else if (itemId == R.id.nav_members) {
+        }
+//        else if (itemId == R.id.nav_expenses) {
+//            binding.toolbar.setTitle("Expenses");
+//        }
+        else if (itemId == R.id.nav_members) {
             binding.toolbar.setTitle("Members");
         } else if (itemId == R.id.nav_documents) {
             binding.toolbar.setTitle("Documents");
