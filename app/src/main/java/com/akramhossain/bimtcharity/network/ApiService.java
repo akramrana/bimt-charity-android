@@ -1,6 +1,7 @@
 package com.akramhossain.bimtcharity.network;
 
 import com.akramhossain.bimtcharity.models.DashboardResponse;
+import com.akramhossain.bimtcharity.models.FundRequestResponse;
 import com.akramhossain.bimtcharity.models.InvoiceResponse;
 import com.akramhossain.bimtcharity.models.LoginRequest;
 import com.akramhossain.bimtcharity.models.LoginResponse;
@@ -30,6 +31,12 @@ public interface ApiService {
 
     @GET("ws/payment-received")
     Call<PaymentReceivedResponse> getPaymentsReceived(
+            @Query("user_id") String userId,
+            @Query("page") int page
+    );
+
+    @GET("ws/fund-request")
+    Call<FundRequestResponse> getFundRequests(
             @Query("user_id") String userId,
             @Query("page") int page
     );
