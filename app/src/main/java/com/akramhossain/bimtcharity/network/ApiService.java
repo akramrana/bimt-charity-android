@@ -4,6 +4,7 @@ import com.akramhossain.bimtcharity.models.DashboardResponse;
 import com.akramhossain.bimtcharity.models.InvoiceResponse;
 import com.akramhossain.bimtcharity.models.LoginRequest;
 import com.akramhossain.bimtcharity.models.LoginResponse;
+import com.akramhossain.bimtcharity.models.PaymentReceivedResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -23,6 +24,12 @@ public interface ApiService {
 
     @GET("ws/monthly-invoice")
     Call<InvoiceResponse> getInvoices(
+            @Query("user_id") String userId,
+            @Query("page") int page
+    );
+
+    @GET("ws/payment-received")
+    Call<PaymentReceivedResponse> getPaymentsReceived(
             @Query("user_id") String userId,
             @Query("page") int page
     );

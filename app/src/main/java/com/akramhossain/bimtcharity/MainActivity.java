@@ -17,6 +17,7 @@ import com.akramhossain.bimtcharity.databinding.ActivityMainBinding;
 import com.akramhossain.bimtcharity.databinding.NavHeaderMainBinding;
 import com.akramhossain.bimtcharity.fragments.DashboardFragment;
 import com.akramhossain.bimtcharity.fragments.InvoiceFragment;
+import com.akramhossain.bimtcharity.fragments.PaymentReceivedFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
 
@@ -120,6 +121,13 @@ public class MainActivity extends AppCompatActivity
                     .commit();
             binding.toolbar.setTitle("Invoices");
         } else if (itemId == R.id.nav_sadaqah) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(
+                            R.id.contentFrame,
+                            new PaymentReceivedFragment()
+                    )
+                    .commit();
             binding.toolbar.setTitle("Sadaqah");
         } else if (itemId == R.id.nav_fund_request) {
             binding.toolbar.setTitle("Fund Request");
