@@ -93,6 +93,8 @@ public class DashboardFragment extends Fragment {
             return;
         }
 
+        showLoading();
+
         ApiClient.getApiService()
                 .getDashboard(userId)
                 .enqueue(new Callback<DashboardResponse>() {
@@ -101,6 +103,7 @@ public class DashboardFragment extends Fragment {
                             @NonNull Call<DashboardResponse> call,
                             @NonNull Response<DashboardResponse> response
                     ) {
+                        hideLoading();
                         if (!isAdded() || binding == null) {
                             return;
                         }
@@ -147,6 +150,7 @@ public class DashboardFragment extends Fragment {
                             @NonNull Call<DashboardResponse> call,
                             @NonNull Throwable throwable
                     ) {
+                        hideLoading();
                         if (!isAdded() || binding == null) {
                             return;
                         }
@@ -259,5 +263,15 @@ public class DashboardFragment extends Fragment {
         }
 
         fundStatusAdapter.updateItems(items);
+    }
+
+    private void showLoading() {
+        binding.progressBar.setVisibility(View.VISIBLE);
+        binding.dashboardContent.setVisibility(View.GONE);
+    }
+
+    private void hideLoading() {
+        binding.progressBar.setVisibility(View.GONE);
+        binding.dashboardContent.setVisibility(View.VISIBLE);
     }
 }

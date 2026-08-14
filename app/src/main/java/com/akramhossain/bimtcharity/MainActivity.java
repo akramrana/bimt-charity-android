@@ -16,8 +16,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.akramhossain.bimtcharity.databinding.ActivityMainBinding;
 import com.akramhossain.bimtcharity.databinding.NavHeaderMainBinding;
 import com.akramhossain.bimtcharity.fragments.DashboardFragment;
+import com.akramhossain.bimtcharity.fragments.DocumentFragment;
 import com.akramhossain.bimtcharity.fragments.FundRequestFragment;
 import com.akramhossain.bimtcharity.fragments.InvoiceFragment;
+import com.akramhossain.bimtcharity.fragments.NotificationFragment;
 import com.akramhossain.bimtcharity.fragments.PaymentReceivedFragment;
 import com.akramhossain.bimtcharity.fragments.PaymentReleaseFragment;
 import com.akramhossain.bimtcharity.fragments.UserFragment;
@@ -165,7 +167,21 @@ public class MainActivity extends AppCompatActivity
             binding.toolbar.setTitle("Members");
         } else if (itemId == R.id.nav_documents) {
             binding.toolbar.setTitle("Documents");
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(
+                            R.id.contentFrame,
+                            new DocumentFragment()
+                    )
+                    .commit();
         } else if (itemId == R.id.nav_activity_log) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(
+                            R.id.contentFrame,
+                            new NotificationFragment()
+                    )
+                    .commit();
             binding.toolbar.setTitle("Activity Log");
         }else if (itemId == R.id.nav_logout) {
             logout();

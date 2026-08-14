@@ -1,10 +1,12 @@
 package com.akramhossain.bimtcharity.network;
 
 import com.akramhossain.bimtcharity.models.DashboardResponse;
+import com.akramhossain.bimtcharity.models.DocumentResponse;
 import com.akramhossain.bimtcharity.models.FundRequestResponse;
 import com.akramhossain.bimtcharity.models.InvoiceResponse;
 import com.akramhossain.bimtcharity.models.LoginRequest;
 import com.akramhossain.bimtcharity.models.LoginResponse;
+import com.akramhossain.bimtcharity.models.NotificationResponse;
 import com.akramhossain.bimtcharity.models.PaymentReceivedResponse;
 import com.akramhossain.bimtcharity.models.PaymentReleaseResponse;
 import com.akramhossain.bimtcharity.models.UserResponse;
@@ -51,6 +53,18 @@ public interface ApiService {
 
     @GET("ws/user")
     Call<UserResponse> getUsers(
+            @Query("user_id") String userId,
+            @Query("page") int page
+    );
+
+    @GET("ws/document")
+    Call<DocumentResponse> getDocuments(
+            @Query("user_id") String userId,
+            @Query("page") int page
+    );
+
+    @GET("ws/notification")
+    Call<NotificationResponse> getNotifications(
             @Query("user_id") String userId,
             @Query("page") int page
     );
