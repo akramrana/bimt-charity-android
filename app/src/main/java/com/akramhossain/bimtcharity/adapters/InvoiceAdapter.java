@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.akramhossain.bimtcharity.R;
 import com.akramhossain.bimtcharity.databinding.ItemInvoiceBinding;
 import com.akramhossain.bimtcharity.models.InvoiceResponse;
 
@@ -13,6 +14,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import android.graphics.Color;
 
 public class InvoiceAdapter
         extends RecyclerView.Adapter<InvoiceAdapter.InvoiceViewHolder> {
@@ -100,11 +102,30 @@ public class InvoiceAdapter
                     invoice.getCurrencyCode()+" " + formatter.format(invoice.getAmount())
             );
 
-            binding.txtStatus.setText(
-                    invoice.getIsPaid() == 1
-                            ? "PAID"
-                            : "UNPAID"
-            );
+            if (invoice.getIsPaid() == 1) {
+
+                binding.txtStatus.setText("PAID");
+
+                binding.txtStatus.setTextColor(
+                        Color.parseColor("#1B5E20")
+                );
+
+                binding.txtStatus.setBackgroundResource(
+                        R.drawable.bg_status_paid
+                );
+
+            } else {
+
+                binding.txtStatus.setText("UNPAID");
+
+                binding.txtStatus.setTextColor(
+                        Color.parseColor("#B71C1C")
+                );
+
+                binding.txtStatus.setBackgroundResource(
+                        R.drawable.bg_status_unpaid
+                );
+            }
         }
     }
 }
