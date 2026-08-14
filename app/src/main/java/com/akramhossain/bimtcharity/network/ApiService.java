@@ -1,6 +1,7 @@
 package com.akramhossain.bimtcharity.network;
 
 import com.akramhossain.bimtcharity.models.DashboardResponse;
+import com.akramhossain.bimtcharity.models.InvoiceResponse;
 import com.akramhossain.bimtcharity.models.LoginRequest;
 import com.akramhossain.bimtcharity.models.LoginResponse;
 
@@ -18,5 +19,11 @@ public interface ApiService {
     @GET("ws/dashboard")
     Call<DashboardResponse> getDashboard(
             @Query("user_id") String userId
+    );
+
+    @GET("ws/monthly-invoice")
+    Call<InvoiceResponse> getInvoices(
+            @Query("user_id") String userId,
+            @Query("page") int page
     );
 }

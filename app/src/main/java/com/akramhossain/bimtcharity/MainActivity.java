@@ -16,6 +16,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.akramhossain.bimtcharity.databinding.ActivityMainBinding;
 import com.akramhossain.bimtcharity.databinding.NavHeaderMainBinding;
 import com.akramhossain.bimtcharity.fragments.DashboardFragment;
+import com.akramhossain.bimtcharity.fragments.InvoiceFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
 
@@ -101,8 +102,22 @@ public class MainActivity extends AppCompatActivity
         int itemId = item.getItemId();
 
         if (itemId == R.id.nav_dashboard) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(
+                            R.id.contentFrame,
+                            new DashboardFragment()
+                    )
+                    .commit();
             binding.toolbar.setTitle("Dashboard");
         } else if (itemId == R.id.nav_invoices) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(
+                            R.id.contentFrame,
+                            new InvoiceFragment()
+                    )
+                    .commit();
             binding.toolbar.setTitle("Invoices");
         } else if (itemId == R.id.nav_sadaqah) {
             binding.toolbar.setTitle("Sadaqah");
