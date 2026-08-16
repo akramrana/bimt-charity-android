@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
             android:text="Akram Hossain"
-            android:textColor="?attr/colorOnSurface"
+            android:textColor="@color/bimt_green_dark"
             android:textSize="14sp"
             android:textStyle="bold" />
 
