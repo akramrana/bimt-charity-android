@@ -50,12 +50,26 @@ public class SubmitPaymentFragment extends Fragment {
     private static final String SESSION_NAME = "bimt_session";
     private static final int BDT_CURRENCY_ID = 13;
     private static final int MAX_IMAGE_DIMENSION = 1600;
+    private static final String[] CURRENCY_CODES = (
+            "AED,AFN,ALL,AMD,ANG,AOA,ARS,AUD,AWG,AZN,BAM,BBD,BDT,BGN,BD,BIF,"
+                    + "BMD,BND,BOB,BRL,BSD,BTC,BTN,BWP,BYN,BYR,BZD,CAD,CDF,CHF,CLF,CLP,"
+                    + "CNH,CNY,COP,CRC,CUC,CUP,CVE,CZK,DJF,DKK,DOP,DZD,EGP,ERN,ETB,EUR,"
+                    + "FJD,FKP,GBP,GEL,GGP,GHS,GIP,GMD,GNF,GTQ,GYD,HKD,HNL,HRK,HTG,HUF,"
+                    + "IDR,ILS,IMP,INR,IQD,IRR,ISK,JEP,JMD,JOD,JPY,KES,KGS,KHR,KMF,KPW,"
+                    + "KRW,KD,KYD,KZT,LAK,LBP,LKR,LRD,LSL,LYD,MAD,MDL,MGA,MKD,MMK,MNT,"
+                    + "MOP,MRO,MUR,MVR,MWK,MXN,MYR,MZN,NAD,NGN,NIO,NOK,NPR,NZD,OR,PAB,"
+                    + "PEN,PGK,PHP,PKR,PLN,PYG,QR,RON,RSD,RUB,RWF,SR,SBD,SCR,SDG,SEK,SGD,"
+                    + "SHP,SLL,SOS,SRD,SSP,STD,SVC,SYP,SZL,THB,TJS,TMT,TND,TOP,TRY,TTD,"
+                    + "TWD,TZS,UAH,UGX,USD,UYU,UZS,VEF,VND,VUV,WST,XAF,XAG,XAU,XCD,XDR,"
+                    + "XOF,XPD,XPF,XPT,YER,ZAR,ZMK,ZMW,ZWL"
+    ).split(",");
 
     private final List<UnpaidInvoice> unpaidInvoices = new ArrayList<>();
     private final ExecutorService imageExecutor = Executors.newSingleThreadExecutor();
     private FragmentSubmitPaymentBinding binding;
     private UnpaidInvoice selectedInvoice;
     private String selectedImageBase64;
+    private int selectedCurrencyId = BDT_CURRENCY_ID;
     private boolean submitting;
     private boolean loadingInvoices;
 
@@ -85,7 +99,7 @@ public class SubmitPaymentFragment extends Fragment {
         binding.monthDropdown.setText(months[calendar.get(Calendar.MONTH)], false);
         List<String> years = new ArrayList<>();
         int currentYear = calendar.get(Calendar.YEAR);
-        for (int year = currentYear - 2; year <= currentYear + 2; year++) {
+        for (int year = currentYear - 5; year <= currentYear; year++) {
             years.add(String.valueOf(year));
         }
         binding.yearDropdown.setAdapter(new ArrayAdapter<>(requireContext(),
@@ -93,9 +107,13 @@ public class SubmitPaymentFragment extends Fragment {
         binding.yearDropdown.setText(String.valueOf(currentYear), false);
 
         binding.currencyDropdown.setAdapter(new ArrayAdapter<>(requireContext(),
-                android.R.layout.simple_dropdown_item_1line,
-                new String[]{"BDT"}));
+                android.R.layout.simple_dropdown_item_1line, CURRENCY_CODES));
         binding.currencyDropdown.setText("BDT", false);
+        binding.currencyDropdown.setOnItemClickListener((parent, view, position, id) -> {
+            // Backend currency IDs in the supplied list are sequential and one-based.
+            selectedCurrencyId = position + 1;
+            binding.currencyLayout.setError(null);
+        });
     }
 
     private void setupListeners() {
@@ -273,7 +291,7 @@ public class SubmitPaymentFragment extends Fragment {
                 binding.amountLayout.setError("Enter an amount greater than 0");
                 valid = false;
             }
-            if (textOf(binding.currencyDropdown).isEmpty()) {
+            if (textOf(binding.currencyDropdown).isEmpty() || selectedCurrencyId <= 0) {
                 binding.currencyLayout.setError("Currency is required");
                 valid = false;
             }
@@ -299,7 +317,7 @@ public class SubmitPaymentFragment extends Fragment {
                 ? PaymentSubmitRequest.againstInvoice(userId, date, comments,
                 selectedInvoice.getMonthlyInvoiceId(), selectedImageBase64)
                 : PaymentSubmitRequest.withoutInvoice(userId, date, comments, amount,
-                BDT_CURRENCY_ID, textOf(binding.monthDropdown),
+                selectedCurrencyId, textOf(binding.monthDropdown),
                 textOf(binding.yearDropdown), selectedImageBase64);
         submit(request);
     }
@@ -346,6 +364,8 @@ public class SubmitPaymentFragment extends Fragment {
         selectedImageBase64 = null;
         binding.invoiceDropdown.setText("", false);
         binding.amountEditText.setText("");
+        selectedCurrencyId = BDT_CURRENCY_ID;
+        binding.currencyDropdown.setText("BDT", false);
         binding.commentsEditText.setText("");
         binding.proofPreview.setImageResource(R.drawable.ic_upload);
         int previewPadding = Math.round(36 * getResources().getDisplayMetrics().density);
