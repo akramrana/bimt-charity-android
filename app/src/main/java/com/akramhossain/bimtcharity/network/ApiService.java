@@ -11,6 +11,9 @@ import com.akramhossain.bimtcharity.models.LoginResponse;
 import com.akramhossain.bimtcharity.models.NotificationResponse;
 import com.akramhossain.bimtcharity.models.PaymentReceivedResponse;
 import com.akramhossain.bimtcharity.models.PaymentReleaseResponse;
+import com.akramhossain.bimtcharity.models.PaymentSubmitRequest;
+import com.akramhossain.bimtcharity.models.PaymentSubmitResponse;
+import com.akramhossain.bimtcharity.models.UnpaidInvoiceResponse;
 import com.akramhossain.bimtcharity.models.UserResponse;
 
 import retrofit2.Call;
@@ -42,6 +45,16 @@ public interface ApiService {
     Call<PaymentReceivedResponse> getPaymentsReceived(
             @Query("user_id") String userId,
             @Query("page") int page
+    );
+
+    @GET("ws/unpaid-invoices")
+    Call<UnpaidInvoiceResponse> getUnpaidInvoices(
+            @Query("user_id") String userId
+    );
+
+    @POST("ws/add-sadaqa")
+    Call<PaymentSubmitResponse> submitPayment(
+            @Body PaymentSubmitRequest request
     );
 
     @GET("ws/fund-request")

@@ -47,6 +47,14 @@ public class PaymentReceivedFragment extends Fragment {
         );
 
         setupRecyclerView();
+        binding.fabSubmitProof.setOnClickListener(view ->
+                requireActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(com.akramhossain.bimtcharity.R.id.contentFrame,
+                                new SubmitPaymentFragment())
+                        .addToBackStack(null)
+                        .commit()
+        );
         loadPaymentsReceived(1);
 
         return binding.getRoot();
