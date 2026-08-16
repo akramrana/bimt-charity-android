@@ -1,6 +1,9 @@
 package com.akramhossain.bimtcharity.network;
 
 import com.akramhossain.bimtcharity.models.DashboardResponse;
+import com.akramhossain.bimtcharity.models.CmsResponse;
+import com.akramhossain.bimtcharity.models.DeleteAccountRequest;
+import com.akramhossain.bimtcharity.models.DeleteAccountResponse;
 import com.akramhossain.bimtcharity.models.DocumentResponse;
 import com.akramhossain.bimtcharity.models.EditProfileRequest;
 import com.akramhossain.bimtcharity.models.EditProfileResponse;
@@ -23,6 +26,9 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface ApiService {
+
+    @GET("ws/cms")
+    Call<CmsResponse> getCmsPage(@Query("page") int pageId);
 
     @POST("ws/login")
     Call<LoginResponse> login(@Body LoginRequest request);
@@ -86,4 +92,7 @@ public interface ApiService {
             @Query("user_id") String userId,
             @Query("page") int page
     );
+
+    @POST("ws/delete-account")
+    Call<DeleteAccountResponse> deleteAccount(@Body DeleteAccountRequest request);
 }
