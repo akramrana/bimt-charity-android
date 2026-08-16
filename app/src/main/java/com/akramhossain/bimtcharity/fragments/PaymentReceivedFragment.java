@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.akramhossain.bimtcharity.MainActivity;
 import com.akramhossain.bimtcharity.adapters.PaymentReceivedAdapter;
 import com.akramhossain.bimtcharity.databinding.FragmentPaymentReceivedBinding;
 import com.akramhossain.bimtcharity.models.PaymentReceivedResponse;
@@ -47,14 +48,17 @@ public class PaymentReceivedFragment extends Fragment {
         );
 
         setupRecyclerView();
-        binding.fabSubmitProof.setOnClickListener(view ->
-                requireActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(com.akramhossain.bimtcharity.R.id.contentFrame,
-                                new SubmitPaymentFragment())
-                        .addToBackStack(null)
-                        .commit()
-        );
+        binding.fabSubmitProof.setOnClickListener(view -> {
+            ((MainActivity) requireActivity())
+                    .setToolbarTitle("Submit Payment Proof");
+
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(com.akramhossain.bimtcharity.R.id.contentFrame,
+                            new SubmitPaymentFragment())
+                    .addToBackStack(null)
+                    .commit();
+        });
         loadPaymentsReceived(1);
 
         return binding.getRoot();

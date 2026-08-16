@@ -24,6 +24,7 @@ import com.akramhossain.bimtcharity.fragments.InvoiceFragment;
 import com.akramhossain.bimtcharity.fragments.NotificationFragment;
 import com.akramhossain.bimtcharity.fragments.PaymentReceivedFragment;
 import com.akramhossain.bimtcharity.fragments.PaymentReleaseFragment;
+import com.akramhossain.bimtcharity.fragments.SubmitPaymentFragment;
 import com.akramhossain.bimtcharity.fragments.UserFragment;
 import com.akramhossain.bimtcharity.models.DeleteAccountRequest;
 import com.akramhossain.bimtcharity.models.DeleteAccountResponse;
@@ -32,6 +33,7 @@ import com.akramhossain.bimtcharity.network.ApiService;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.fragment.app.Fragment;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -103,6 +105,52 @@ public class MainActivity extends AppCompatActivity
         );
 
         loadDashboard();
+
+        getSupportFragmentManager()
+                .addOnBackStackChangedListener(() -> updateToolbarTitle());
+    }
+
+    private void updateToolbarTitle() {
+
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.contentFrame);
+
+        if (fragment instanceof PaymentReceivedFragment) {
+            binding.toolbar.setTitle("Sadaqah");
+
+        } else if (fragment instanceof SubmitPaymentFragment) {
+            binding.toolbar.setTitle("Submit Payment Proof");
+
+        } else if (fragment instanceof DashboardFragment) {
+            binding.toolbar.setTitle("Dashboard");
+
+        } else if (fragment instanceof InvoiceFragment) {
+            binding.toolbar.setTitle("Invoices");
+
+        } else if (fragment instanceof FundRequestFragment) {
+            binding.toolbar.setTitle("Fund Request");
+
+        } else if (fragment instanceof PaymentReleaseFragment) {
+            binding.toolbar.setTitle("Donation");
+
+        } else if (fragment instanceof UserFragment) {
+            binding.toolbar.setTitle("Members");
+
+        } else if (fragment instanceof DocumentFragment) {
+            binding.toolbar.setTitle("Documents");
+
+        } else if (fragment instanceof NotificationFragment) {
+            binding.toolbar.setTitle("Activity Log");
+
+        } else if (fragment instanceof EditProfileFragment) {
+            binding.toolbar.setTitle("Update Profile");
+        }else if (fragment instanceof CmsFragment) {
+            Bundle args = fragment.getArguments();
+            if (args != null) {
+                binding.toolbar.setTitle(
+                        args.getString("ARG_TITLE", "")
+                );
+            }
+        }
     }
 
     private void loadDashboard() {
@@ -234,6 +282,10 @@ public class MainActivity extends AppCompatActivity
         binding.drawerLayout.closeDrawer(GravityCompat.START);
 
         return true;
+    }
+
+    public void setToolbarTitle(String title) {
+        binding.toolbar.setTitle(title);
     }
 
     private void logout() {
