@@ -174,6 +174,7 @@ public class LoginActivity extends AppCompatActivity {
                 .putString("created_at", member.getCreatedAt())
                 .putString("batch", member.getBatch())
                 .putString("department", member.getDepartment())
+                .putString("address", member.getAddress())
                 .apply();
     }
 

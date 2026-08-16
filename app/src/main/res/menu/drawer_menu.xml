@@ -51,6 +51,11 @@
             android:title="Activity Log" />
 
         <item
+            android:id="@+id/nav_edit_profile"
+            android:icon="@android:drawable/ic_menu_edit"
+            android:title="Edit Profile" />
+
+        <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_logout"
             android:title="Logout" />

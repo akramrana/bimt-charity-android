@@ -2,6 +2,8 @@ package com.akramhossain.bimtcharity.network;
 
 import com.akramhossain.bimtcharity.models.DashboardResponse;
 import com.akramhossain.bimtcharity.models.DocumentResponse;
+import com.akramhossain.bimtcharity.models.EditProfileRequest;
+import com.akramhossain.bimtcharity.models.EditProfileResponse;
 import com.akramhossain.bimtcharity.models.FundRequestResponse;
 import com.akramhossain.bimtcharity.models.InvoiceResponse;
 import com.akramhossain.bimtcharity.models.LoginRequest;
@@ -21,6 +23,9 @@ public interface ApiService {
 
     @POST("ws/login")
     Call<LoginResponse> login(@Body LoginRequest request);
+
+    @POST("ws/edit-profile")
+    Call<EditProfileResponse> editProfile(@Body EditProfileRequest request);
 
     @GET("ws/dashboard")
     Call<DashboardResponse> getDashboard(

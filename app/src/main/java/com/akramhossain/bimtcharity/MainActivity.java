@@ -17,6 +17,7 @@ import com.akramhossain.bimtcharity.databinding.ActivityMainBinding;
 import com.akramhossain.bimtcharity.databinding.NavHeaderMainBinding;
 import com.akramhossain.bimtcharity.fragments.DashboardFragment;
 import com.akramhossain.bimtcharity.fragments.DocumentFragment;
+import com.akramhossain.bimtcharity.fragments.EditProfileFragment;
 import com.akramhossain.bimtcharity.fragments.FundRequestFragment;
 import com.akramhossain.bimtcharity.fragments.InvoiceFragment;
 import com.akramhossain.bimtcharity.fragments.NotificationFragment;
@@ -183,7 +184,17 @@ public class MainActivity extends AppCompatActivity
                     )
                     .commit();
             binding.toolbar.setTitle("Activity Log");
-        }else if (itemId == R.id.nav_logout) {
+        }else if (itemId == R.id.nav_edit_profile) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(
+                            R.id.contentFrame,
+                            new EditProfileFragment()
+                    )
+                    .commit();
+            binding.toolbar.setTitle("Update Profile");
+        }
+        else if (itemId == R.id.nav_logout) {
             logout();
         }
 

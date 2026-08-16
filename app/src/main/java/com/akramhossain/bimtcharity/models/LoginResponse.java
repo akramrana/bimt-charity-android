@@ -37,6 +37,7 @@ public class LoginResponse {
         private String email;
         private String image;
         private String phone;
+        private String address;
 
         @SerializedName("user_type")
         private String userType;
@@ -92,6 +93,10 @@ public class LoginResponse {
 
         public String getDepartment() {
             return department;
+        }
+
+        public String getAddress() {
+            return address;
         }
     }
 }
