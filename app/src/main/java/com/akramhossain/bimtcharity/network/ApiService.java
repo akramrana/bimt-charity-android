@@ -54,7 +54,7 @@ public interface ApiService {
     Call<PaymentReceivedResponse> getPaymentsReceived(
             @Query("user_id") String userId,
             @Query("page") int page,
-            @Query("PaymentReceivedSearch[received_invoice_number]=") String search
+            @Query("PaymentReceivedSearch[received_invoice_number]") String search
     );
 
     @GET("ws/unpaid-invoices")
@@ -70,7 +70,8 @@ public interface ApiService {
     @GET("ws/fund-request")
     Call<FundRequestResponse> getFundRequests(
             @Query("user_id") String userId,
-            @Query("page") int page
+            @Query("page") int page,
+            @Query("FundRequestSearch[fund_request_number]") String search
     );
 
     @GET("ws/payment-release")

@@ -235,7 +235,7 @@ public class MainActivity extends AppCompatActivity
                     )
                     .commit();
             binding.toolbar.setTitle("Fund Request");
-            showSearchToolbar(false);
+            showSearchToolbar(true);
         } else if (itemId == R.id.nav_donation) {
             getSupportFragmentManager()
                     .beginTransaction()
@@ -701,6 +701,9 @@ public class MainActivity extends AppCompatActivity
                 }
                 if (fragment instanceof PaymentReceivedFragment) {
                     ((PaymentReceivedFragment) fragment).showSearch();
+                }
+                if (fragment instanceof FundRequestFragment) {
+                    ((FundRequestFragment) fragment).showSearch();
                 }
                 return true;
             }

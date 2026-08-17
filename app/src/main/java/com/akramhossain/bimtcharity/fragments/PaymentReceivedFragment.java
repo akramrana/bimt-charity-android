@@ -26,7 +26,6 @@ import com.akramhossain.bimtcharity.MainActivity;
 import com.akramhossain.bimtcharity.R;
 import com.akramhossain.bimtcharity.adapters.PaymentReceivedAdapter;
 import com.akramhossain.bimtcharity.databinding.FragmentPaymentReceivedBinding;
-import com.akramhossain.bimtcharity.models.InvoiceResponse;
 import com.akramhossain.bimtcharity.models.PaymentReceivedResponse;
 import com.akramhossain.bimtcharity.network.ApiClient;
 import com.google.android.material.appbar.MaterialToolbar;
