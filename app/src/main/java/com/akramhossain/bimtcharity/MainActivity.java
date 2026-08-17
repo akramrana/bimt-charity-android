@@ -711,6 +711,9 @@ public class MainActivity extends AppCompatActivity
                 if (fragment instanceof UserFragment) {
                     ((UserFragment) fragment).showSearch();
                 }
+                if (fragment instanceof DocumentFragment) {
+                    ((DocumentFragment) fragment).showSearch();
+                }
                 return true;
             }
             return false;

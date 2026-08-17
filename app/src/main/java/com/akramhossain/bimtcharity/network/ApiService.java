@@ -91,7 +91,8 @@ public interface ApiService {
     @GET("ws/document")
     Call<DocumentResponse> getDocuments(
             @Query("user_id") String userId,
-            @Query("page") int page
+            @Query("page") int page,
+            @Query("DocumentSearch[title]") String search
     );
 
     @GET("ws/notification")
