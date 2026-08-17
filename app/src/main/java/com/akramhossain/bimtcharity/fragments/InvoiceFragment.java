@@ -43,13 +43,11 @@ public class InvoiceFragment extends Fragment {
     private int currentPage = 1;
     private boolean isLoading = false;
     private boolean hasMorePages = true;
+
     private String currentSearch = "";
     private final Handler searchHandler = new Handler(Looper.getMainLooper());
-
     private Runnable searchRunnable;
-
     private EditText searchEditText;
-
     private Call<InvoiceResponse> invoiceCall;
 
     @Nullable

@@ -225,7 +225,7 @@ public class MainActivity extends AppCompatActivity
                     )
                     .commit();
             binding.toolbar.setTitle("Sadaqah");
-            showSearchToolbar(false);
+            showSearchToolbar(true);
         } else if (itemId == R.id.nav_fund_request) {
             getSupportFragmentManager()
                     .beginTransaction()
@@ -245,7 +245,7 @@ public class MainActivity extends AppCompatActivity
                     )
                     .commit();
             binding.toolbar.setTitle("Donation");
-            showSearchToolbar(false);
+            showSearchToolbar(true);
         }
 //        else if (itemId == R.id.nav_expenses) {
 //            binding.toolbar.setTitle("Expenses");
@@ -259,7 +259,7 @@ public class MainActivity extends AppCompatActivity
                     )
                     .commit();
             binding.toolbar.setTitle("Members");
-            showSearchToolbar(false);
+            showSearchToolbar(true);
         } else if (itemId == R.id.nav_documents) {
             binding.toolbar.setTitle("Documents");
             getSupportFragmentManager()
@@ -269,7 +269,7 @@ public class MainActivity extends AppCompatActivity
                             new DocumentFragment()
                     )
                     .commit();
-            showSearchToolbar(false);
+            showSearchToolbar(true);
         } else if (itemId == R.id.nav_activity_log) {
             getSupportFragmentManager()
                     .beginTransaction()
@@ -500,6 +500,8 @@ public class MainActivity extends AppCompatActivity
 
                 binding.toolbar.setTitle("Dashboard");
 
+                showSearchToolbar(false);
+
                 break;
 
             case "sadaqah":
@@ -513,6 +515,8 @@ public class MainActivity extends AppCompatActivity
                         .commit();
 
                 binding.toolbar.setTitle("Sadaqah");
+
+                showSearchToolbar(true);
 
                 break;
 
@@ -528,6 +532,8 @@ public class MainActivity extends AppCompatActivity
 
                 binding.toolbar.setTitle("Invoices");
 
+                showSearchToolbar(true);
+
                 break;
 
             case "fund_request":
@@ -541,6 +547,8 @@ public class MainActivity extends AppCompatActivity
                         .commit();
 
                 binding.toolbar.setTitle("Fund Request");
+
+                showSearchToolbar(true);
 
                 break;
 
@@ -556,6 +564,8 @@ public class MainActivity extends AppCompatActivity
 
                 binding.toolbar.setTitle("Donation");
 
+                showSearchToolbar(true);
+
                 break;
 
             case "activity_log":
@@ -569,6 +579,8 @@ public class MainActivity extends AppCompatActivity
                         .commit();
 
                 binding.toolbar.setTitle("Activity Log");
+
+                showSearchToolbar(false);
 
                 break;
 
@@ -584,6 +596,8 @@ public class MainActivity extends AppCompatActivity
 
                 binding.toolbar.setTitle("Members");
 
+                showSearchToolbar(true);
+
                 break;
 
             case "document":
@@ -597,6 +611,8 @@ public class MainActivity extends AppCompatActivity
                         .commit();
 
                 binding.toolbar.setTitle("Documents");
+
+                showSearchToolbar(true);
 
                 break;
         }
@@ -682,6 +698,9 @@ public class MainActivity extends AppCompatActivity
                 Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.contentFrame);
                 if (fragment instanceof InvoiceFragment) {
                     ((InvoiceFragment) fragment).showSearch();
+                }
+                if (fragment instanceof PaymentReceivedFragment) {
+                    ((PaymentReceivedFragment) fragment).showSearch();
                 }
                 return true;
             }

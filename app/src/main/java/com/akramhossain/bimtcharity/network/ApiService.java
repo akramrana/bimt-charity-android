@@ -53,7 +53,8 @@ public interface ApiService {
     @GET("ws/payment-received")
     Call<PaymentReceivedResponse> getPaymentsReceived(
             @Query("user_id") String userId,
-            @Query("page") int page
+            @Query("page") int page,
+            @Query("PaymentReceivedSearch[received_invoice_number]=") String search
     );
 
     @GET("ws/unpaid-invoices")
