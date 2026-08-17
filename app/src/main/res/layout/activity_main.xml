@@ -21,7 +21,8 @@
             android:elevation="4dp"
             android:title="Dashboard"
             android:titleTextColor="@android:color/white"
-            app:navigationIconTint="@android:color/white" />
+            app:navigationIconTint="@android:color/white"
+            app:menu="@menu/toolbar_menu" />
 
         <FrameLayout
             android:id="@+id/contentFrame"

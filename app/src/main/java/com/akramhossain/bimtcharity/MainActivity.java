@@ -39,10 +39,12 @@ import com.akramhossain.bimtcharity.network.ApiClient;
 import com.akramhossain.bimtcharity.network.ApiService;
 import com.akramhossain.bimtcharity.service.PushTokenManager;
 import com.akramhossain.bimtcharity.utils.Utils;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -53,6 +55,9 @@ public class MainActivity extends AppCompatActivity
 
     private ActivityMainBinding binding;
     private ActionBarDrawerToggle drawerToggle;
+    private MaterialToolbar toolbar;
+    private DrawerLayout drawerLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +66,10 @@ public class MainActivity extends AppCompatActivity
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        setSupportActionBar(binding.toolbar);
+        toolbar = binding.toolbar;
+        drawerLayout = binding.drawerLayout;
+
+        //setSupportActionBar(binding.toolbar);
 
         drawerToggle = new ActionBarDrawerToggle(
                 this,
@@ -129,6 +137,8 @@ public class MainActivity extends AppCompatActivity
         }else {
             Log.e("Push", "No supported push service available.");
         }
+
+        setupToolbar();
     }
 
     private void updateToolbarTitle() {
@@ -204,6 +214,7 @@ public class MainActivity extends AppCompatActivity
                     )
                     .commit();
             binding.toolbar.setTitle("Invoices");
+            showSearchToolbar(true);
         } else if (itemId == R.id.nav_sadaqah) {
             getSupportFragmentManager()
                     .beginTransaction()
@@ -648,4 +659,32 @@ public class MainActivity extends AppCompatActivity
                 });
     }
 
+    private void setupToolbar() {
+
+        toolbar.setNavigationOnClickListener(v -> {
+            drawerLayout.openDrawer(GravityCompat.START);
+        });
+
+        toolbar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.action_search) {
+                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.contentFrame);
+                if (fragment instanceof InvoiceFragment) {
+                    ((InvoiceFragment) fragment).showSearch();
+                }
+                return true;
+            }
+            return false;
+        });
+    }
+
+    private void showSearchToolbar(boolean showSearch) {
+        MenuItem searchItem = toolbar.getMenu().findItem(R.id.action_search);
+        if (searchItem != null) {
+            searchItem.setVisible(showSearch);
+        }
+        drawerLayout.closeDrawers();
+    }
+
 }
+
+
