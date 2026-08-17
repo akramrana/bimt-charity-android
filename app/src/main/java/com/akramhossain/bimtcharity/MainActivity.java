@@ -205,6 +205,7 @@ public class MainActivity extends AppCompatActivity
                     )
                     .commit();
             binding.toolbar.setTitle("Dashboard");
+            showSearchToolbar(false);
         } else if (itemId == R.id.nav_invoices) {
             getSupportFragmentManager()
                     .beginTransaction()
@@ -224,6 +225,7 @@ public class MainActivity extends AppCompatActivity
                     )
                     .commit();
             binding.toolbar.setTitle("Sadaqah");
+            showSearchToolbar(false);
         } else if (itemId == R.id.nav_fund_request) {
             getSupportFragmentManager()
                     .beginTransaction()
@@ -233,6 +235,7 @@ public class MainActivity extends AppCompatActivity
                     )
                     .commit();
             binding.toolbar.setTitle("Fund Request");
+            showSearchToolbar(false);
         } else if (itemId == R.id.nav_donation) {
             getSupportFragmentManager()
                     .beginTransaction()
@@ -242,6 +245,7 @@ public class MainActivity extends AppCompatActivity
                     )
                     .commit();
             binding.toolbar.setTitle("Donation");
+            showSearchToolbar(false);
         }
 //        else if (itemId == R.id.nav_expenses) {
 //            binding.toolbar.setTitle("Expenses");
@@ -255,6 +259,7 @@ public class MainActivity extends AppCompatActivity
                     )
                     .commit();
             binding.toolbar.setTitle("Members");
+            showSearchToolbar(false);
         } else if (itemId == R.id.nav_documents) {
             binding.toolbar.setTitle("Documents");
             getSupportFragmentManager()
@@ -264,6 +269,7 @@ public class MainActivity extends AppCompatActivity
                             new DocumentFragment()
                     )
                     .commit();
+            showSearchToolbar(false);
         } else if (itemId == R.id.nav_activity_log) {
             getSupportFragmentManager()
                     .beginTransaction()
@@ -273,6 +279,7 @@ public class MainActivity extends AppCompatActivity
                     )
                     .commit();
             binding.toolbar.setTitle("Activity Log");
+            showSearchToolbar(false);
         }else if (itemId == R.id.nav_edit_profile) {
             getSupportFragmentManager()
                     .beginTransaction()
@@ -282,6 +289,7 @@ public class MainActivity extends AppCompatActivity
                     )
                     .commit();
             binding.toolbar.setTitle("Update Profile");
+            showSearchToolbar(false);
         }
         else if (itemId == R.id.nav_terms) {
             getSupportFragmentManager()
@@ -292,8 +300,10 @@ public class MainActivity extends AppCompatActivity
                     )
                     .commit();
             binding.toolbar.setTitle("Terms & Conditions");
+            showSearchToolbar(false);
         }
         else if (itemId == R.id.nav_delete_profile) {
+            showSearchToolbar(false);
             showDeleteAccountConfirmation();
         }
         else if (itemId == R.id.nav_privacy) {
@@ -305,8 +315,10 @@ public class MainActivity extends AppCompatActivity
                     )
                     .commit();
             binding.toolbar.setTitle("Privacy Policy");
+            showSearchToolbar(false);
         }
         else if (itemId == R.id.nav_logout) {
+            showSearchToolbar(false);
             logout();
         }
 
