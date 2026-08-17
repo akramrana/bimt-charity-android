@@ -77,7 +77,8 @@ public interface ApiService {
     @GET("ws/payment-release")
     Call<PaymentReleaseResponse> getPaymentReleases(
             @Query("user_id") String userId,
-            @Query("page") int page
+            @Query("page") int page,
+            @Query("PaymentReleaseSearch[release_invoice_number]") String search
     );
 
     @GET("ws/user")
