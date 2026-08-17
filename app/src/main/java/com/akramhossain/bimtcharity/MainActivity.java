@@ -708,6 +708,9 @@ public class MainActivity extends AppCompatActivity
                 if (fragment instanceof PaymentReleaseFragment) {
                     ((PaymentReleaseFragment) fragment).showSearch();
                 }
+                if (fragment instanceof UserFragment) {
+                    ((UserFragment) fragment).showSearch();
+                }
                 return true;
             }
             return false;

@@ -84,7 +84,8 @@ public interface ApiService {
     @GET("ws/user")
     Call<UserResponse> getUsers(
             @Query("user_id") String userId,
-            @Query("page") int page
+            @Query("page") int page,
+            @Query("UserSearch[member_code]") String search
     );
 
     @GET("ws/document")
