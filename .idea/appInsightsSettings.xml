@@ -27,10 +27,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.akramhossain.bimtcharity" />
+                  <option name="mobileSdkAppId" value="1:308794996479:android:16f9d9d2545d41dfc9feca" />
+                  <option name="projectId" value="bimt-charity" />
+                  <option name="projectNumber" value="308794996479" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

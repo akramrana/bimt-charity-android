@@ -1,16 +1,23 @@
 package com.akramhossain.bimtcharity;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 
 import com.akramhossain.bimtcharity.databinding.ActivityMainBinding;
@@ -30,8 +37,11 @@ import com.akramhossain.bimtcharity.models.DeleteAccountRequest;
 import com.akramhossain.bimtcharity.models.DeleteAccountResponse;
 import com.akramhossain.bimtcharity.network.ApiClient;
 import com.akramhossain.bimtcharity.network.ApiService;
+import com.akramhossain.bimtcharity.service.PushTokenManager;
+import com.akramhossain.bimtcharity.utils.Utils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import androidx.fragment.app.Fragment;
 import retrofit2.Call;
@@ -108,6 +118,17 @@ public class MainActivity extends AppCompatActivity
 
         getSupportFragmentManager()
                 .addOnBackStackChangedListener(() -> updateToolbarTitle());
+
+        handleNotificationIntent(getIntent());
+
+        requestNotificationPermission();
+
+        if (Utils.isGooglePlayServicesAvailable(this)) {
+            Log.d("PushCheck", "Using FCM");
+            getCurrentFCMToken();
+        }else {
+            Log.e("Push", "No supported push service available.");
+        }
     }
 
     private void updateToolbarTitle() {
@@ -419,6 +440,212 @@ public class MainActivity extends AppCompatActivity
 
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        setIntent(intent);
+
+        handleNotificationIntent(intent);
+    }
+
+    private void handleNotificationIntent(Intent intent) {
+
+        if (intent == null) {
+            return;
+        }
+
+        String screen = intent.getStringExtra("screen");
+
+        if (screen == null || screen.trim().isEmpty()) {
+            return;
+        }
+
+        switch (screen) {
+
+            case "dashboard":
+
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(
+                                R.id.contentFrame,
+                                new DashboardFragment()
+                        )
+                        .commit();
+
+                binding.toolbar.setTitle("Dashboard");
+
+                break;
+
+            case "sadaqah":
+
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(
+                                R.id.contentFrame,
+                                new PaymentReceivedFragment()
+                        )
+                        .commit();
+
+                binding.toolbar.setTitle("Sadaqah");
+
+                break;
+
+            case "invoice":
+
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(
+                                R.id.contentFrame,
+                                new InvoiceFragment()
+                        )
+                        .commit();
+
+                binding.toolbar.setTitle("Invoices");
+
+                break;
+
+            case "fund_request":
+
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(
+                                R.id.contentFrame,
+                                new FundRequestFragment()
+                        )
+                        .commit();
+
+                binding.toolbar.setTitle("Fund Request");
+
+                break;
+
+            case "donation":
+
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(
+                                R.id.contentFrame,
+                                new PaymentReleaseFragment()
+                        )
+                        .commit();
+
+                binding.toolbar.setTitle("Donation");
+
+                break;
+
+            case "activity_log":
+
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(
+                                R.id.contentFrame,
+                                new NotificationFragment()
+                        )
+                        .commit();
+
+                binding.toolbar.setTitle("Activity Log");
+
+                break;
+
+            case "member":
+
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(
+                                R.id.contentFrame,
+                                new UserFragment()
+                        )
+                        .commit();
+
+                binding.toolbar.setTitle("Members");
+
+                break;
+
+            case "document":
+
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(
+                                R.id.contentFrame,
+                                new DocumentFragment()
+                        )
+                        .commit();
+
+                binding.toolbar.setTitle("Documents");
+
+                break;
+        }
+
+        // Prevent accidental re-processing later
+        intent.removeExtra("screen");
+    }
+
+    private final ActivityResultLauncher<String>
+            notificationPermissionLauncher =
+            registerForActivityResult(
+                    new ActivityResultContracts.RequestPermission(),
+                    isGranted -> {
+                        if (isGranted) {
+                            Log.d("FirebasePush", "Notification permission granted");
+                        } else {
+                            Log.d("FirebasePush", "Notification permission denied");
+                        }
+                    }
+            );
+
+    private void requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED) {
+
+                notificationPermissionLauncher.launch(
+                        Manifest.permission.POST_NOTIFICATIONS
+                );
+            }
+        }
+    }
+
+    private void getCurrentFCMToken(){
+        FirebaseMessaging.getInstance()
+                .getToken()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.e(
+                                "FirebasePush",
+                                "Fetching FCM token failed",
+                                task.getException()
+                        );
+                        return;
+                    }
+
+                    String token = task.getResult();
+
+                    Log.d("FirebasePush", "FCM token: " + token);
+
+                    FirebaseMessaging.getInstance()
+                            .subscribeToTopic("all")
+                            .addOnCompleteListener(topicTask -> {
+                                if (topicTask.isSuccessful()) {
+                                    Log.d("FirebasePush", "Subscribed to topic: all");
+                                } else {
+                                    Log.e(
+                                            "FirebasePush",
+                                            "Topic subscription failed",
+                                            topicTask.getException()
+                                    );
+                                }
+                            });
+
+                    PushTokenManager.sendTokenToServer(
+                            getApplicationContext(),
+                            token,
+                            "fcm"
+                    );
+                });
     }
 
 }

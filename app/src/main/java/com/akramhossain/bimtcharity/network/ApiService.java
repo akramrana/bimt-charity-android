@@ -16,6 +16,8 @@ import com.akramhossain.bimtcharity.models.PaymentReceivedResponse;
 import com.akramhossain.bimtcharity.models.PaymentReleaseResponse;
 import com.akramhossain.bimtcharity.models.PaymentSubmitRequest;
 import com.akramhossain.bimtcharity.models.PaymentSubmitResponse;
+import com.akramhossain.bimtcharity.models.PushTokenRequest;
+import com.akramhossain.bimtcharity.models.PushTokenResponse;
 import com.akramhossain.bimtcharity.models.UnpaidInvoiceResponse;
 import com.akramhossain.bimtcharity.models.UserResponse;
 
@@ -95,4 +97,9 @@ public interface ApiService {
 
     @POST("ws/delete-account")
     Call<DeleteAccountResponse> deleteAccount(@Body DeleteAccountRequest request);
+
+    @POST("ws/save-device-token")
+    Call<PushTokenResponse> saveDeviceToken(
+            @Body PushTokenRequest request
+    );
 }

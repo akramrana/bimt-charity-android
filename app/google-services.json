@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "308794996479",
+    "project_id": "bimt-charity",
+    "storage_bucket": "bimt-charity.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:308794996479:android:16f9d9d2545d41dfc9feca",
+        "android_client_info": {
+          "package_name": "com.akramhossain.bimtcharity"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHnInL2WAtyENNzuWIxLBRAAfgFav0bUE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
