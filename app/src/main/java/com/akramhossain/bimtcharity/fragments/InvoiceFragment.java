@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +49,8 @@ public class InvoiceFragment extends Fragment {
     private Runnable searchRunnable;
 
     private EditText searchEditText;
+
+    private Call<InvoiceResponse> invoiceCall;
 
     @Nullable
     @Override
@@ -156,9 +159,9 @@ public class InvoiceFragment extends Fragment {
                 ? null
                 : currentSearch;
 
-        ApiClient.getApiService()
-                .getInvoices(userId, page, search)
-                .enqueue(new Callback<InvoiceResponse>() {
+        invoiceCall = ApiClient.getApiService().getInvoices(userId, page, search);
+
+        invoiceCall.enqueue(new Callback<InvoiceResponse>() {
 
                     @Override
                     public void onResponse(
@@ -269,8 +272,23 @@ public class InvoiceFragment extends Fragment {
 
         searchEditText.setHint("Search invoices...");
         searchEditText.setSingleLine(true);
-        searchEditText.setTextColor(Color.WHITE);
-        searchEditText.setHintTextColor(Color.LTGRAY);
+
+        TypedValue typedValue = new TypedValue();
+        requireContext().getTheme().resolveAttribute(
+                com.google.android.material.R.attr.colorOnSurface,
+                typedValue,
+                true
+        );
+
+        searchEditText.setTextColor(typedValue.data);
+
+        requireContext().getTheme().resolveAttribute(
+                com.google.android.material.R.attr.colorOnSurfaceVariant,
+                typedValue,
+                true
+        );
+        searchEditText.setHintTextColor(typedValue.data);
+
         searchEditText.setBackgroundColor(Color.TRANSPARENT);
 
         Toolbar.LayoutParams params = new Toolbar.LayoutParams(
@@ -341,16 +359,21 @@ public class InvoiceFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
+        if (searchRunnable != null) {
+            searchHandler.removeCallbacks(searchRunnable);
+        }
+
+        if (invoiceCall != null) {
+            invoiceCall.cancel();
+        }
 
         if (searchEditText != null) {
-
-            MaterialToolbar toolbar =
-                    requireActivity().findViewById(R.id.toolbar);
-
+            MaterialToolbar toolbar = requireActivity().findViewById(R.id.toolbar);
             toolbar.removeView(searchEditText);
-
             searchEditText = null;
         }
+        binding = null;
+        super.onDestroyView();
+
     }
 }

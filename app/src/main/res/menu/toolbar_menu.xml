@@ -7,7 +7,7 @@
         android:icon="@drawable/ic_search"
         android:title="Search"
         android:visible="false"
-        app:iconTint="@android:color/white"
+        app:iconTint="@color/bimt_green"
         app:showAsAction="always" />
 
 </menu>

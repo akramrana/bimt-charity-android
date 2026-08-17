@@ -47,7 +47,7 @@ public interface ApiService {
     Call<InvoiceResponse> getInvoices(
             @Query("user_id") String userId,
             @Query("page") int page,
-            @Query("search") String search
+            @Query("MonthlyInvoiceSearch[monthly_invoice_number]") String search
     );
 
     @GET("ws/payment-received")
