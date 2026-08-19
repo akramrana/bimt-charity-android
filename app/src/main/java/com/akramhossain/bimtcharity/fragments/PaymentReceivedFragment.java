@@ -187,8 +187,6 @@ public class PaymentReceivedFragment extends Fragment {
 
         String donatedBy = ownOnly ? userId: null;
 
-        Log.d("FILTER", "ownOnly = " + ownOnly);
-
         apiCall = ApiClient.getApiService()
                 .getPaymentsReceived(userId, page, search, donatedBy);
 

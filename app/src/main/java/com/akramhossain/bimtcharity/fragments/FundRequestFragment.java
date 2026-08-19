@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,6 +45,8 @@ public class FundRequestFragment extends Fragment {
     private boolean isLoading = false;
     private boolean hasMorePages = true;
 
+    private boolean ownOnly = false;
+
     private String currentSearch = "";
     private final Handler searchHandler = new Handler(Looper.getMainLooper());
     private Runnable searchRunnable;
@@ -58,6 +61,28 @@ public class FundRequestFragment extends Fragment {
             Bundle savedInstanceState
     ) {
         binding = FragmentFundRequestBinding.inflate(inflater, container, false);
+
+        binding.listViewFilterGroup.addOnButtonCheckedListener(
+                (group, checkedId, isChecked) -> {
+                    if (!isChecked) {
+                        return;
+                    }
+
+                    int selectedId = group.getCheckedButtonId();
+                    String name = getResources().getResourceEntryName(checkedId);
+
+                    if (checkedId == binding.btnMyList.getId()) {
+                        ownOnly = true;
+                    } else if (checkedId == binding.btnAllList.getId()) {
+                        ownOnly = false;
+                    }
+
+                    currentPage = 1;
+                    hasMorePages = true;
+
+                    loadFundRequests(1);
+                }
+        );
 
         setupRecyclerView();
         loadFundRequests(1);
@@ -134,8 +159,11 @@ public class FundRequestFragment extends Fragment {
                 ? null
                 : currentSearch;
 
+        String requestUserId = ownOnly ? userId: null;
+
         apiCall = ApiClient.getApiService()
-                .getFundRequests(userId, page, search);
+                .getFundRequests(userId, page, search, requestUserId);
+
         apiCall.enqueue(new Callback<FundRequestResponse>() {
                     @Override
                     public void onResponse(

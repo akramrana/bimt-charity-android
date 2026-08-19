@@ -73,7 +73,8 @@ public interface ApiService {
     Call<FundRequestResponse> getFundRequests(
             @Query("user_id") String userId,
             @Query("page") int page,
-            @Query("FundRequestSearch[fund_request_number]") String search
+            @Query("FundRequestSearch[fund_request_number]") String search,
+            @Query("FundRequestSearch[request_user_id]") String requestUserId
     );
 
     @GET("ws/payment-release")
