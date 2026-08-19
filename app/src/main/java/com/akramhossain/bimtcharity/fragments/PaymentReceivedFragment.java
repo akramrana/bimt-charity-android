@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,6 +46,8 @@ public class PaymentReceivedFragment extends Fragment {
     private boolean isLoading = false;
     private boolean hasMorePages = true;
 
+    private boolean ownOnly = false;
+
     private String currentSearch = "";
     private final Handler searchHandler = new Handler(Looper.getMainLooper());
     private Runnable searchRunnable;
@@ -63,7 +66,34 @@ public class PaymentReceivedFragment extends Fragment {
                 false
         );
 
+        binding.listViewFilterGroup.addOnButtonCheckedListener(
+                (group, checkedId, isChecked) -> {
+                    if (!isChecked) {
+                        return;
+                    }
+
+                    int selectedId = group.getCheckedButtonId();
+                    String name = getResources().getResourceEntryName(checkedId);
+
+                    Log.d("FILTER", "clicked = " + name);
+                    Log.d("FILTER", "selectedId = " + selectedId);
+                    Log.d("FILTER", "checkedId = " + checkedId);
+
+                    if (checkedId == binding.btnMyList.getId()) {
+                        ownOnly = true;
+                    } else if (checkedId == binding.btnAllList.getId()) {
+                        ownOnly = false;
+                    }
+
+                    currentPage = 1;
+                    hasMorePages = true;
+
+                    loadPaymentsReceived(1);
+                }
+        );
+
         setupRecyclerView();
+
         binding.fabSubmitProof.setOnClickListener(view -> {
             ((MainActivity) requireActivity())
                     .setToolbarTitle("Submit Payment Proof");
@@ -75,6 +105,7 @@ public class PaymentReceivedFragment extends Fragment {
                     .addToBackStack(null)
                     .commit();
         });
+
         loadPaymentsReceived(1);
 
         return binding.getRoot();
@@ -154,8 +185,12 @@ public class PaymentReceivedFragment extends Fragment {
                 ? null
                 : currentSearch;
 
+        String donatedBy = ownOnly ? userId: null;
+
+        Log.d("FILTER", "ownOnly = " + ownOnly);
+
         apiCall = ApiClient.getApiService()
-                .getPaymentsReceived(userId, page, search);
+                .getPaymentsReceived(userId, page, search, donatedBy);
 
         apiCall.enqueue(new Callback<PaymentReceivedResponse>() {
                     @Override

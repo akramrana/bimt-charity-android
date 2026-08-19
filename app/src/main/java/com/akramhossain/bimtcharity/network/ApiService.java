@@ -47,14 +47,16 @@ public interface ApiService {
     Call<InvoiceResponse> getInvoices(
             @Query("user_id") String userId,
             @Query("page") int page,
-            @Query("MonthlyInvoiceSearch[monthly_invoice_number]") String search
+            @Query("MonthlyInvoiceSearch[monthly_invoice_number]") String search,
+            @Query("MonthlyInvoiceSearch[receiver_id]") String receiverUserId
     );
 
     @GET("ws/payment-received")
     Call<PaymentReceivedResponse> getPaymentsReceived(
             @Query("user_id") String userId,
             @Query("page") int page,
-            @Query("PaymentReceivedSearch[received_invoice_number]") String search
+            @Query("PaymentReceivedSearch[received_invoice_number]") String search,
+            @Query("PaymentReceivedSearch[donated_by]") String donatedBy
     );
 
     @GET("ws/unpaid-invoices")

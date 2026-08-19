@@ -44,6 +44,8 @@ public class InvoiceFragment extends Fragment {
     private boolean isLoading = false;
     private boolean hasMorePages = true;
 
+    private boolean ownOnly = false;
+
     private String currentSearch = "";
     private final Handler searchHandler = new Handler(Looper.getMainLooper());
     private Runnable searchRunnable;
@@ -61,6 +63,24 @@ public class InvoiceFragment extends Fragment {
                 inflater,
                 container,
                 false
+        );
+
+        binding.invoiceFilterGroup.addOnButtonCheckedListener(
+                (group, checkedId, isChecked) -> {
+                    if (!isChecked) {
+                        return;
+                    }
+                    if (checkedId == R.id.btnMyInvoices) {
+                        ownOnly = true;
+                    } else if (checkedId == R.id.btnAllInvoices) {
+                        ownOnly = false;
+                    }
+
+                    currentPage = 1;
+                    hasMorePages = true;
+
+                    loadInvoices(1);
+                }
         );
 
         setupRecyclerView();
@@ -157,7 +177,9 @@ public class InvoiceFragment extends Fragment {
                 ? null
                 : currentSearch;
 
-        invoiceCall = ApiClient.getApiService().getInvoices(userId, page, search);
+        String receiverUserId = ownOnly ? userId: null;
+
+        invoiceCall = ApiClient.getApiService().getInvoices(userId, page, search, receiverUserId);
 
         invoiceCall.enqueue(new Callback<InvoiceResponse>() {
 
