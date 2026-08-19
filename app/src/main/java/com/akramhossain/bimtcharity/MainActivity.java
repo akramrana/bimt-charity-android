@@ -190,6 +190,8 @@ public class MainActivity extends AppCompatActivity
                 .beginTransaction()
                 .replace(R.id.contentFrame, new DashboardFragment())
                 .commit();
+
+        binding.toolbar.setTitle("Dashboard");
     }
 
     @Override
