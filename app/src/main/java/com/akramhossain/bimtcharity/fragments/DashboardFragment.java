@@ -103,10 +103,12 @@ public class DashboardFragment extends Fragment {
                             @NonNull Call<DashboardResponse> call,
                             @NonNull Response<DashboardResponse> response
                     ) {
-                        hideLoading();
+
                         if (!isAdded() || binding == null) {
                             return;
                         }
+
+                        hideLoading();
 
                         if (!response.isSuccessful()) {
                             Toast.makeText(
@@ -150,10 +152,12 @@ public class DashboardFragment extends Fragment {
                             @NonNull Call<DashboardResponse> call,
                             @NonNull Throwable throwable
                     ) {
-                        hideLoading();
+
                         if (!isAdded() || binding == null) {
                             return;
                         }
+
+                        hideLoading();
 
                         Toast.makeText(
                                 requireContext(),
