@@ -239,14 +239,35 @@ public class SubmitPaymentFragment extends Fragment {
                             Toast.makeText(requireContext(), responseMessage(response,
                                     "Unable to load unpaid invoices"), Toast.LENGTH_LONG).show();
                         }
+
                         selectedInvoice = null;
+
+                        binding.invoiceDropdown.setAdapter(
+                                new ArrayAdapter<>(
+                                        requireContext(),
+                                        android.R.layout.simple_dropdown_item_1line,
+                                        unpaidInvoices
+                                )
+                        );
+
+                        boolean hasInvoices = !unpaidInvoices.isEmpty();
+
                         binding.invoiceDropdown.setText("", false);
-                        binding.invoiceDropdown.setAdapter(new ArrayAdapter<>(requireContext(),
-                                android.R.layout.simple_dropdown_item_1line, unpaidInvoices));
-                        binding.invoiceDropdown.setEnabled(!unpaidInvoices.isEmpty());
-                        binding.txtInvoiceEmpty.setText("No unpaid invoices found.");
-                        binding.txtInvoiceEmpty.setVisibility(isAgainstInvoice()
-                                && unpaidInvoices.isEmpty() ? View.VISIBLE : View.GONE);
+
+                        // Disable BOTH dropdown and its parent layout
+                        binding.invoiceDropdown.setEnabled(hasInvoices);
+                        binding.invoiceLayout.setEnabled(hasInvoices);
+
+                        binding.txtInvoiceEmpty.setText(
+                                "No unpaid invoices found. You can select Without Invoice."
+                        );
+
+                        binding.txtInvoiceEmpty.setVisibility(
+                                isAgainstInvoice() && !hasInvoices
+                                        ? View.VISIBLE
+                                        : View.GONE
+                        );
+
                         updateLoadingState();
                     }
 
@@ -254,13 +275,24 @@ public class SubmitPaymentFragment extends Fragment {
                     public void onFailure(@NonNull Call<UnpaidInvoiceResponse> call,
                                           @NonNull Throwable throwable) {
                         if (binding == null) return;
+
                         loadingInvoices = false;
+
+                        binding.invoiceDropdown.setEnabled(false);
+                        binding.invoiceLayout.setEnabled(false);
+
                         binding.txtInvoiceEmpty.setText("Unable to load unpaid invoices.");
-                        binding.txtInvoiceEmpty.setVisibility(isAgainstInvoice()
-                                ? View.VISIBLE : View.GONE);
+                        binding.txtInvoiceEmpty.setVisibility(
+                                isAgainstInvoice() ? View.VISIBLE : View.GONE
+                        );
+
                         updateLoadingState();
-                        Toast.makeText(requireContext(), "Connection failed: "
-                                + throwable.getMessage(), Toast.LENGTH_LONG).show();
+
+                        Toast.makeText(
+                                requireContext(),
+                                "Connection failed: " + throwable.getMessage(),
+                                Toast.LENGTH_LONG
+                        ).show();
                     }
                 });
     }
