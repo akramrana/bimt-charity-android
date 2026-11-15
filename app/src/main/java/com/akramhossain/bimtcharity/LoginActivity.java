@@ -3,6 +3,7 @@ package com.akramhossain.bimtcharity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -132,6 +133,12 @@ public class LoginActivity extends AppCompatActivity {
                             @NonNull Throwable throwable
                     ) {
                         setLoading(false);
+
+                        Log.e(
+                                "LoginAPI",
+                                "Login request failed",
+                                throwable
+                        );
 
                         Toast.makeText(
                                 LoginActivity.this,
