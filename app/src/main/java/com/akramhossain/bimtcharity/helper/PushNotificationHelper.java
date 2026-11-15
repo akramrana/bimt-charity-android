@@ -26,6 +26,41 @@ public class PushNotificationHelper {
     ) {
         createNotificationChannel(context);
 
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(
+                        context,
+                        CHANNEL_ID
+                )
+                        .setSmallIcon(R.drawable.ic_notification)
+                        .setContentTitle(title)
+                        .setContentText(body)
+                        .setStyle(
+                                new NotificationCompat.BigTextStyle()
+                                        .bigText(body)
+                        )
+                        .setPriority(NotificationCompat.PRIORITY_HIGH)
+                        .setAutoCancel(true);
+
+        NotificationManager manager =
+                (NotificationManager) context.getSystemService(
+                        Context.NOTIFICATION_SERVICE
+                );
+
+        if (manager != null) {
+            builder.setContentIntent(createClickAction(context, data));
+
+            int notificationId =
+                    (int) (System.currentTimeMillis()
+                            % Integer.MAX_VALUE);
+
+            manager.notify(
+                    notificationId,
+                    builder.build()
+            );
+        }
+    }
+
+    private static PendingIntent createClickAction(Context context, Map<String, String> data) {
         Intent intent = new Intent(context, MainActivity.class);
 
         intent.setFlags(
@@ -52,46 +87,13 @@ public class PushNotificationHelper {
         int requestCode =
                 (int) (System.currentTimeMillis() % Integer.MAX_VALUE);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(
+        return PendingIntent.getActivity(
                 context,
                 requestCode,
                 intent,
                 PendingIntent.FLAG_UPDATE_CURRENT |
                         PendingIntent.FLAG_IMMUTABLE
         );
-
-        NotificationCompat.Builder builder =
-                new NotificationCompat.Builder(
-                        context,
-                        CHANNEL_ID
-                )
-                        .setSmallIcon(R.drawable.ic_notification)
-                        .setContentTitle(title)
-                        .setContentText(body)
-                        .setStyle(
-                                new NotificationCompat.BigTextStyle()
-                                        .bigText(body)
-                        )
-                        .setPriority(NotificationCompat.PRIORITY_HIGH)
-                        .setAutoCancel(true)
-                        .setContentIntent(pendingIntent);
-
-        NotificationManager manager =
-                (NotificationManager) context.getSystemService(
-                        Context.NOTIFICATION_SERVICE
-                );
-
-        if (manager != null) {
-
-            int notificationId =
-                    (int) (System.currentTimeMillis()
-                            % Integer.MAX_VALUE);
-
-            manager.notify(
-                    notificationId,
-                    builder.build()
-            );
-        }
     }
 
     private static void createNotificationChannel(

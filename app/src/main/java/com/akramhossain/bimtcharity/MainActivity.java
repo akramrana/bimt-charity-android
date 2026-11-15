@@ -62,6 +62,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!Utils.isLoggedIn(this)) {
+            openLogin();
+            return;
+        }
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -340,23 +344,7 @@ public class MainActivity extends AppCompatActivity
                 .setTitle("Logout")
                 .setMessage("Are you sure you want to logout?")
                 .setNegativeButton("Cancel", null)
-                .setPositiveButton("Logout", (dialog, which) -> {
-
-                    getSharedPreferences("bimt_session", MODE_PRIVATE)
-                            .edit()
-                            .clear()
-                            .apply();
-
-                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                    intent.addFlags(
-                            Intent.FLAG_ACTIVITY_NEW_TASK
-                                    | Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    );
-
-                    startActivity(intent);
-                    finish();
-
-                })
+                .setPositiveButton("Logout", (dialog, which) -> clearSessionAndOpenLogin())
                 .show();
     }
 
@@ -413,7 +401,7 @@ public class MainActivity extends AppCompatActivity
                             Toast.LENGTH_SHORT
                     ).show();
 
-                    logoutAfterAccountDeletion();
+                    clearSessionAndOpenLogin();
 
                 } else {
 
@@ -449,18 +437,21 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    private void logoutAfterAccountDeletion() {
+    private void clearSessionAndOpenLogin() {
 
         getSharedPreferences("bimt_session", MODE_PRIVATE)
                 .edit()
                 .clear()
                 .apply();
+        openLogin();
+    }
 
+    private void openLogin() {
         Intent intent = new Intent(this, LoginActivity.class);
 
         intent.setFlags(
-                Intent.FLAG_ACTIVITY_NEW_TASK |
-                        Intent.FLAG_ACTIVITY_CLEAR_TASK
+                Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                        Intent.FLAG_ACTIVITY_SINGLE_TOP
         );
 
         startActivity(intent);
@@ -470,6 +461,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        if (!Utils.isLoggedIn(this)) {
+            openLogin();
+            return;
+        }
 
         setIntent(intent);
 

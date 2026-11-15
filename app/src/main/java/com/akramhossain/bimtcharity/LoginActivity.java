@@ -16,6 +16,7 @@ import com.akramhossain.bimtcharity.databinding.ActivityLoginBinding;
 import com.akramhossain.bimtcharity.models.LoginRequest;
 import com.akramhossain.bimtcharity.models.LoginResponse;
 import com.akramhossain.bimtcharity.network.ApiClient;
+import com.akramhossain.bimtcharity.utils.Utils;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -25,12 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        boolean loggedIn = getSharedPreferences(
-                "bimt_session",
-                MODE_PRIVATE
-        ).getBoolean("logged_in", false);
-
-        if (loggedIn) {
+        if (Utils.isLoggedIn(this)) {
             openDashboard();
             return;
         }

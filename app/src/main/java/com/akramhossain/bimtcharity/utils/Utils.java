@@ -13,6 +13,11 @@ public class Utils {
     public Utils() {
     }
 
+    public static boolean isLoggedIn(Context context) {
+        return context.getSharedPreferences("bimt_session", Context.MODE_PRIVATE)
+                .getBoolean("logged_in", false);
+    }
+
     public static boolean isGooglePlayServicesAvailable(Context context) {
         GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
 
